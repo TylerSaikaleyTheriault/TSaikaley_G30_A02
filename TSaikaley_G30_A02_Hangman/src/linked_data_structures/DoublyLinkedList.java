@@ -144,7 +144,7 @@ public class DoublyLinkedList<E> implements Serializable
 	 * outside the range 0 to this.length - 1
 	 */
 
-	private void addAfter(DLNode<E> p, DLNode<E> newnode)
+	public void addAfter(DLNode<E> p, DLNode<E> newnode)
 	{
 		newnode.setPredecessor(p);
 		newnode.setSuccessor(p.getSuccessor());
@@ -152,7 +152,7 @@ public class DoublyLinkedList<E> implements Serializable
 		p.setSuccessor(newnode);
 	}
 
-	private DLNode<E> find(E target)
+	public DLNode<E> find(E target)
 	{
 		DLNode<E> cursor = (DLNode<E>) head.getSuccessor();
 
@@ -170,7 +170,7 @@ public class DoublyLinkedList<E> implements Serializable
 		return null; // failure
 	}
 
-	private DLNode<E> find(int p)
+	public DLNode<E> find(int p)
 	{
 		if ((p < 0) || (p >= this.length))
 		{

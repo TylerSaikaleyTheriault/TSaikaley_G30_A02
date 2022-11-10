@@ -3,21 +3,27 @@ package Hangman;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player implements Serializable{
+public class Player implements Serializable {
 	private String playerName;
 	private int numberGamesPlayed, numberGamesWon;
+	public Dictionary dict;
+	public HangmanGame game;
 //private ArrayList<String> previousNames = new ArrayList<String>();
 
 	public Player() {
 		playerName = "Unknown";
 		numberGamesPlayed = 0;
 		numberGamesWon = 0;
+		dict = new Dictionary();
+		game = new HangmanGame();
 	}// Player()
 
 	public Player(String name) {
 		playerName = name;
 		numberGamesPlayed = 0;
 		numberGamesWon = 0;
+		dict = new Dictionary();
+		game = new HangmanGame();
 	}// Player(String name)
 
 	public String getPlayerName() {
@@ -48,10 +54,16 @@ public class Player implements Serializable{
 	public void addWin() {
 		this.numberGamesWon++;
 		this.numberGamesPlayed++;
-	}//addWin()
-	
+		dict.removeCurrentWord();
+	}// addWin()
+
 	public void addGamePlayed() {
 		this.numberGamesPlayed++;
+		dict.removeCurrentWord();
 		
-	}//addGamePlayed()
+	}// addGamePlayed()
+
+	public int getLosses() {
+		return this.numberGamesPlayed - this.numberGamesWon;
+	}
 }

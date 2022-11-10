@@ -9,6 +9,9 @@ import linked_data_structures.*;
 public class HangmanGame implements Serializable {
 	private SinglyLinkedList<Character> currentWordList;
 	private SinglyLinkedList<Character> guessedLettersList;
+	public SinglyLinkedList<Character> correctGuessedLettersList;
+	public SinglyLinkedList<Character> failedGuessedLettersList;
+	public char[] currentWordState;
 	private boolean[] lettersGuessedArray;
 	private int falseCount, correctCount;
 	Scoreboard sb;
@@ -18,46 +21,50 @@ public class HangmanGame implements Serializable {
 	public HangmanGame() {
 		falseCount = 0;
 		correctCount = 0;
-		sb = new Scoreboard();
-		dict = new Dictionary();
 		currentWordList = new SinglyLinkedList<Character>();
 		guessedLettersList = new SinglyLinkedList<Character>();
-		setCurrentWord();
-
+		correctGuessedLettersList = new SinglyLinkedList<Character>();
+		failedGuessedLettersList = new SinglyLinkedList<Character>();
 	}// HangmanGame()
 
 	public HangmanGame(String name) {
 		falseCount = 0;
 		correctCount = 0;
-		sb = new Scoreboard();
-		dict = new Dictionary();
+
 //		player = new Player(name);
 
 		currentWordList = new SinglyLinkedList<Character>();
 		guessedLettersList = new SinglyLinkedList<Character>();
-		setCurrentWord();
-//		sb.addPlayer(player);
-
+		correctGuessedLettersList = new SinglyLinkedList<Character>();
 	}// HangmanGame()
 
-	public void setCurrentWord() {
-
-		String word = dict.getWord();
+	public void setCurrentWord(Player p) {
+		String word = p.dict.getWord();
 		lettersGuessedArray = new boolean[word.length()];
-
+		currentWordState = new char[word.length()];
 		for (int i = word.length() - 1; i >= 0; i--) {
 			currentWordList.add(word.charAt(i));
+			currentWordState[i] = '_';
 			lettersGuessedArray[i] = false;
 		} // for
-//		for(int i = 0; i < currentWordList.getLength(); i++) {
-//			System.out.println(currentWordList.getElementAt(i));
+
+//		for (int i = 0; i < currentWordList.getLength(); i++) {
+//			System.out.print(currentWordList.getElementAt(i));
+//
 //		}
+//		System.out.println();
+//		for (int i = 0; i < currentWordState.length; i++) {
+//			System.out.print(currentWordState[i]);
+//
+//		}
+//		System.out.println();
 	}
 
 	/**
 	 * Method used to get hints. Generates a random letter from the current word and
-	 * checks the letters that have been guessed so far
-	 * Uses a falsecount variable to check if the char matches none of the guessed letters
+	 * checks the letters that have been guessed so far Uses a falsecount variable
+	 * to check if the char matches none of the guessed letters
+	 * 
 	 * @return Char to be used as a hint
 	 */
 	public char getHint() {
@@ -97,6 +104,7 @@ public class HangmanGame implements Serializable {
 	}// getClue()
 
 	public ArrayList<Integer> guessLetter(char c) {
+
 		ArrayList<Integer> indexList = new ArrayList<Integer>();
 
 		for (int i = 0; i < currentWordList.getLength(); i++) {
@@ -105,10 +113,15 @@ public class HangmanGame implements Serializable {
 				correctCount++;
 				indexList.add(i);
 
+				currentWordState[i] = Character.toLowerCase(c);
+
 			} // if
 		} // for
-		if (indexList.size() == 0)
+		if (indexList.size() == 0) {
 			falseCount++;
+			failedGuessedLettersList.add(c);
+		} else
+			correctGuessedLettersList.add(c);
 
 		guessedLettersList.add(c);
 		return indexList;
@@ -139,11 +152,13 @@ public class HangmanGame implements Serializable {
 	}
 
 	public void clearLists() {
-		System.out.println("List pre-clear: " + currentWordList.getLength() + " " + guessedLettersList.getLength());
 		currentWordList = new SinglyLinkedList<Character>();
 		guessedLettersList = new SinglyLinkedList<Character>();
+		correctGuessedLettersList = new SinglyLinkedList<Character>();
+		failedGuessedLettersList = new SinglyLinkedList<Character>();
+		correctCount = 0;
+		falseCount = 0;
 
-		System.out.println("Lists are cleared: " + currentWordList.getLength() + " " + guessedLettersList.getLength());
 	}// clearLists()
 
 //	public void setPlayer(Player p) {

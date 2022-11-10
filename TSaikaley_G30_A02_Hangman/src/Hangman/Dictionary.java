@@ -11,11 +11,12 @@ import java.util.Scanner;
 public class Dictionary implements Serializable {
 	SinglyLinkedList<String> wordsList = new SinglyLinkedList<String>();
 	private File wordsFile = new File("word_db.txt");
-
-	private Scanner reader;
+	private int currentWordIndex;
+	private transient Scanner reader;
 
 	public Dictionary() {
 		createDictionary();
+		currentWordIndex = -1;
 
 	}// Dictionary()
 
@@ -33,7 +34,6 @@ public class Dictionary implements Serializable {
 			System.err.println("word_db.txt not found : " + e);
 		}
 
-		System.out.println(wordsList.getLength());
 
 	}// createDictionary()
 
@@ -50,13 +50,17 @@ public class Dictionary implements Serializable {
 		return successful;
 	}
 
+	public void removeCurrentWord() {
+		wordsList.remove(currentWordIndex);
+	}// removeWord(int)
+
 	// Gets a random word from the wordslist
 	public String getWord() {
 		Random rand = new Random();
 		String theWord = null;
-		int index = rand.nextInt(0, wordsList.getLength() + 1);
+		int index = rand.nextInt(0, wordsList.getLength());
 		theWord = wordsList.getElementAt(index);
-		System.out.println(theWord);
+		currentWordIndex = index;
 		return theWord;
 	}
 }
